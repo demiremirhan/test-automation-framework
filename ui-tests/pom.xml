@@ -40,11 +40,7 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.5.2</version>
-                <configuration>
-                    <systemPropertyVariables>
-                        <selenium.grid.url>${selenium.grid.url}</selenium.grid.url>
-                    </systemPropertyVariables>
-                </configuration>
+
             </plugin>
         </plugins>
     </build>

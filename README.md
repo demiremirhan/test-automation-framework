@@ -12,6 +12,7 @@ Multi-module Maven project implementing production-grade test automation for API
 | Language | Java 21 |
 | API Testing | REST Assured, JUnit 5 |
 | UI Testing | Selenium WebDriver 4.27, Page Object Model |
+| DB Testing     | Testcontainers 1.20, PostgreSQL 16, JDBC |
 | BDD | Cucumber / Gherkin (planned) |
 | Reporting | Allure 2.29 → GitHub Pages |
 | CI/CD | GitHub Actions (parallel jobs) |
@@ -36,6 +37,14 @@ test-automation-framework/
 │       ├── driver/                   # DriverFactory (ThreadLocal, RemoteWebDriver)
 │       ├── pages/                    # Page Objects (Login, Products, Cart, Checkout)
 │       └── tests/                    # Test classes (LoginTests, CartTests, CheckoutTests)
+├── db-tests/                        # Database test module
+│   ├── src/test/java/.../db/
+│   │   ├── dao/                      # Data access objects (ProductDao, OrderDao)
+│   │   ├── model/                    # Java records (Product, Customer, Order)
+│   │   └── tests/                    # Test classes
+│   └── src/test/resources/
+│       ├── init-schema.sql           # Tables, FK, CHECK, INDEX
+│       └── seed-data.sql             # Test fixtures
 ├── .github/workflows/ci.yml         # CI pipeline (API + UI parallel, Allure deploy)
 ├── docker-compose.yml               # Selenium Grid + test runners
 ├── Dockerfile                       # API test container
@@ -53,6 +62,14 @@ test-automation-framework/
 - Login: standard user, locked-out user, invalid credentials
 - Cart: add single/multiple items, remove items, verify contents
 - Checkout: single item flow, multi-item flow, order completion
+
+**DB Tests** — PostgreSQL 16 via Testcontainers
+
+- CRUD operations through DAO layer (`ProductDao`, `OrderDao`)
+- Aggregation queries (SUM, AVG, GROUP BY) and multi-table JOINs
+- Constraint enforcement: foreign key, CHECK, and NOT NULL violations
+- Schema and fixtures loaded per container from `init-schema.sql` / `seed-data.sql`
+- Container lifecycle managed by JUnit 5, no local database required
 
 ## Getting Started
 
@@ -100,17 +117,17 @@ Defined in `common/src/main/resources/config.properties`, overridable via system
 GitHub Actions runs on every push:
 
 ```
-┌─────────────────┐     ┌──────────────────────┐
-│  API Tests       │     │  UI Tests             │
-│  (JDK 21)        │     │  (Selenium Grid)      │
-│  mvn test        │     │  Hub + Chrome Node    │
-└────────┬────────┘     └──────────┬───────────┘
-         │                         │
-         └────────┬────────────────┘
-                  ▼
+┌──────────────┐  ┌──────────────┐  ┌──────────────┐
+│  API Tests   │  │  UI Tests    │  │  DB Tests    │
+│  (JDK 21)    │  │  Selenium    │  │  Test-       │
+│  mvn test    │  │  Grid        │  │  containers  │
+└──────┬───────┘  └──────┬───────┘  └──────┬───────┘
+       │                 │                 │
+       └────────┬────────┴─────────────────┘
+                ▼
        ┌─────────────────────┐
-       │  Allure Report       │
-       │  → GitHub Pages      │
+       │  Allure Report      │
+       │  → GitHub Pages     │
        └─────────────────────┘
 ```
 
