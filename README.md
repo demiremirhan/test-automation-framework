@@ -3,8 +3,7 @@
 [![CI](https://github.com/demiremirhan/test-automation-framework/actions/workflows/ci.yml/badge.svg)](https://github.com/demiremirhan/test-automation-framework/actions/workflows/ci.yml)
 [![Allure Report](https://img.shields.io/badge/Allure-Report-orange?logo=data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0Ij48cGF0aCBmaWxsPSIjZmZmIiBkPSJNMTIgMkw0IDdWMTdMMTIgMjJMMjAgMTdWN0wxMiAyWiIvPjwvc3ZnPg==)](https://demiremirhan.github.io/test-automation-framework)
 
-Multi-module Maven project implementing production-grade test automation for API and UI testing. Built with Java 21, REST Assured, Selenium WebDriver, and JUnit 5.
-
+Multi-module Maven project implementing production-grade test automation across API, UI, and database layers. Built with Java 21, REST Assured, Selenium WebDriver, Testcontainers, and JUnit 5.
 ## Tech Stack
 
 | Layer | Tools |
@@ -13,7 +12,6 @@ Multi-module Maven project implementing production-grade test automation for API
 | API Testing | REST Assured, JUnit 5 |
 | UI Testing | Selenium WebDriver 4.27, Page Object Model |
 | DB Testing     | Testcontainers 1.20, PostgreSQL 16, JDBC |
-| BDD | Cucumber / Gherkin (planned) |
 | Reporting | Allure 2.29 → GitHub Pages |
 | CI/CD | GitHub Actions (parallel jobs) |
 | Infrastructure | Docker Compose, Selenium Grid 4.27 (Hub + Chrome Node) |
@@ -45,7 +43,7 @@ test-automation-framework/
 │   └── src/test/resources/
 │       ├── init-schema.sql           # Tables, FK, CHECK, INDEX
 │       └── seed-data.sql             # Test fixtures
-├── .github/workflows/ci.yml         # CI pipeline (API + UI parallel, Allure deploy)
+├── .github/workflows/ci.yml         # CI pipeline (API + UI + DB parallel, Allure deploy)
 ├── docker-compose.yml               # Selenium Grid + test runners
 ├── Dockerfile                       # API test container
 └── Dockerfile-ui                    # UI test container
@@ -131,8 +129,7 @@ GitHub Actions runs on every push:
        └─────────────────────┘
 ```
 
-API and UI tests run in parallel. Results are merged into a single Allure report and deployed to GitHub Pages on `master`.
-
+API, UI, and DB tests run in parallel. Results are merged into a single Allure report and deployed to GitHub Pages on `master`.
 📊 **[Live Allure Report](https://demiremirhan.github.io/test-automation-framework)**
 
 ## Design Decisions
