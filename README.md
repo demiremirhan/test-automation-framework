@@ -85,6 +85,9 @@ mvn -pl ui-tests -am clean test -Dselenium.grid.url=http://localhost:4444/wd/hub
 # Run API tests
 mvn -pl api-tests -am clean test
 
+# Run DB tests (Testcontainers starts PostgreSQL automatically)
+mvn -pl db-tests -am clean test
+
 # Run everything
 mvn clean test
 ```
@@ -97,6 +100,8 @@ docker compose up api-tests
 
 # Full UI stack (Grid + tests)
 docker compose --profile ui up
+
+DB tests need no separate compose service — Testcontainers provisions and disposes the PostgreSQL container per run.
 ```
 
 ### Configuration
